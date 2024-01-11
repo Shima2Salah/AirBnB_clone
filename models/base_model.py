@@ -20,7 +20,7 @@ class BaseModel:
             for key, val in kwargs.items():
                 if key == "created_at" or key == "updated_at":
                     self.__dict__[key] = datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%f")
-                else:
+                elif key != "__class__":
                     self.__dict__[key] = val
         else:
             storage.new(self)
