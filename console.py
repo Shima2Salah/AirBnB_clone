@@ -46,23 +46,26 @@ class HBNBCommand(cmd.Cmd):
                     ans_list.append(obj.__str__())
             print(ans_list)
 
-    def do_show(self, args):
-        """Prints the string representation of an instance."""
-        args = shlex.split(args)
-        if args == []:
-            print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "Place", "State",
-                             "City", "Amenity", "Review"]:
+    def do_show(self, arg):
+        """method print string representation of instance"""
+        arguments = arg.split()
+        if len(arguments) != 2:
+            if len(arguments) == 0:
+                print("** class name missing **")
+            else:
+                print("** instance id missing **")
+            return
+        class_name, instance_id = arguments
+        if class_name not in globals():
             print("** class doesn't exist **")
-        elif len(args) == 1:
-            print("** instance id missing **")
-        else:
-            models.storage.reload()
-            for ins, obj in models.storage.all().items():
-                if obj.id == args[1] and obj.__class__.__name__ == args[0]:
-                    print(obj.__str__())
-                    return
+            return
+        new_class = globals()[class_name]
+        key = f"{class_name}.{instance_id}"
+        if key not in models.storage.all():
             print("** no instance found **")
+            return
+        inst = models.storage.all()[key]
+        print(inst)
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id."""
