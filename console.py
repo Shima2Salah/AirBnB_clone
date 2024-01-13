@@ -118,19 +118,20 @@ class HBNBCommand(cmd.Cmd):
         """An empty line doesn't execute anything"""
         pass
 
-    def do_create(self, args):
-        """Command to create an instance of a class."""
-        args = shlex.split(args)
-        if args == []:
+    def do_create(self, arg):
+        """method for creating new class"""
+        arguments = arg.split()
+        if len(arguments) != 1:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "Place", "State",
-                             "City", "Amenity", "Review"]:
+            return
+        new_class = arguments[0]
+        if new_class not in globals():
             print("** class doesn't exist **")
-        else:
-            models.storage.reload()
-            new = eval(args[0])()
-            new.save()
-            print (new.id)
+            return
+        all_classes = globals()[new_class]
+        inst = all_classes()
+        inst.save()
+        print(inst.id)
 
 
 if __name__ == '__main__':
