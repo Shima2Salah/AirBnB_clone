@@ -2,7 +2,7 @@
 """Parent class Module representation"""
 from datetime import datetime
 from uuid import uuid4
-from models import storage
+import models
 
 
 class BaseModel:
@@ -24,7 +24,7 @@ class BaseModel:
                 elif key != "__class__":
                     self.__dict__[key] = val
         else:
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """print class name, id ,dictionary"""
@@ -34,7 +34,7 @@ class BaseModel:
     def save(self):
         """method saves date and time updates"""
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """method to get all dictionary keys/values"""
