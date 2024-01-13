@@ -94,8 +94,10 @@ class HBNBCommand(cmd.Cmd):
                     print("** class name missing **")
                 elif len(arguments) == 1:
                     print("** instance id missing **")
-                else:
+                elif len(arguments) == 2:
                     print("** attribute name missing **")
+                else:
+                    print("** value missing **")
             else:
                 print("** value missing **")
             return
