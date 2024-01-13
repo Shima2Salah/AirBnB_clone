@@ -7,8 +7,8 @@ import os
 class FileStorage:
     """Class that manage storage"""
 
-        __file_path = 'file.json'
-        __objects = {}
+    __file_path = 'file.json'
+    __objects = {}
 
     def __init__(self, file__path=None):
         """"initialization for class"""
