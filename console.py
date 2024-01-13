@@ -26,20 +26,6 @@ class HBNBCommand(cmd.Cmd):
         """Command on console (CTRL + D)"""
         return True
 
-    def do_create(self, args):
-        """Command to create an instance of a class."""
-        args = shlex.split(args)
-        if args == []:
-            print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "Place", "State",
-                             "City", "Amenity", "Review"]:
-            print("** class doesn't exist **")
-        else:
-            models.storage.reload()
-            new = eval(args[0])()
-            new.save()
-            print(new.id)
-
     def do_all(self, args):
         """Command to print the string representation of all instances."""
         args = shlex.split(args)
@@ -131,13 +117,6 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """An empty line doesn't execute anything"""
         pass
-
-    def default(self, args):
-        """Handling of default command."""
-        try:
-            self.onecmd(eval(args))
-        except:
-            print("*** Unknown syntax: " + args)
 
 
 if __name__ == '__main__':
