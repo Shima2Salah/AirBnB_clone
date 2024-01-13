@@ -26,25 +26,26 @@ class HBNBCommand(cmd.Cmd):
         """Command on console (CTRL + D)"""
         return True
 
-    def do_all(self, args):
-        """Command to print the string representation of all instances."""
-        args = shlex.split(args)
-        if args == []:
-            models.storage.reload()
-            ans_list = []
-            for ins, obj in models.storage.all().items():
-                ans_list.append(obj.__str__())
-            print(ans_list)
-        elif args[0] not in ["BaseModel", "User", "Place", "State",
-                             "City", "Amenity", "Review"]:
+    def do_destroy(self, arg):
+        """method deletes an instance"""
+        arguments = arg.split()
+        if len(arguments) != 2:
+            if len(arguments) == 0:
+                print("** class name missing **")
+            else:
+                print("** instance id missing **")
+            return
+        class_name, instance_id = arguments
+        if class_name not in globals():
             print("** class doesn't exist **")
-        else:
-            models.storage.reload()
-            ans_list = []
-            for ins, obj in models.storage.all().items():
-                if obj.__class__.__name__ == args[0]:
-                    ans_list.append(obj.__str__())
-            print(ans_list)
+            return
+        destroyed_class = globals()[class_name]
+        key = f"{class_name}.{instance_id}"
+        if key not in models.storage.all():
+            print("** no instance found **")
+            return
+        del models.storage.all()[key]
+        models.storage.save()
 
     def do_show(self, arg):
         """method print string representation of instance"""
