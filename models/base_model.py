@@ -12,14 +12,15 @@ class BaseModel:
         """BaseModel intialization
         args: any tuple
         kwargs: any dictionary item"""
-    
+
         self.id = str(uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         if kwargs is not None and kwargs != {}:
             for key, val in kwargs.items():
                 if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%f")
+                    f_date = "%Y-%m-%dT%H:%M:%S.%f"
+                    self.__dict__[key] = datetime.strptime(val, f_date)
                 elif key != "__class__":
                     self.__dict__[key] = val
         else:
@@ -27,7 +28,10 @@ class BaseModel:
 
     def __str__(self):
         """print class name, id ,dictionary"""
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(
+                self.__class__.__name__,
+                self.id,
+                self.__dict__)
 
     def save(self):
         """method saves date and time updates"""
