@@ -91,7 +91,8 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             req_class = globals()[class_name]
-            print([str(inst) for inst in storage.all().values() if isinstance(inst, req_class)])
+            print([str(inst) for inst in storage.all().values()
+                   if isinstance(inst, req_class)])
         else:
             print([str(inst) for inst in storage.all().values()])
 
@@ -121,6 +122,7 @@ class HBNBCommand(cmd.Cmd):
         inst = storage.all()[key]
         setattr(inst, attr_name, eval(attr_value))
         inst.save()
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
