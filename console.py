@@ -67,25 +67,26 @@ class HBNBCommand(cmd.Cmd):
         inst = models.storage.all()[key]
         print(inst)
 
-    def do_destroy(self, args):
-        """Deletes an instance based on the class name and id."""
-        args = shlex.split(args)
-        if args == []:
-            print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "Place", "State",
-                             "City", "Amenity", "Review"]:
+    def do_destroy(self, arg):
+        """method deletes an instance"""
+        arguments = arg.split()
+        if len(arguments) != 2:
+            if len(arguments) == 0:
+                print("** class name missing **")
+            else:
+                print("** instance id missing **")
+            return
+        class_name, instance_id = arguments
+        if class_name not in globals():
             print("** class doesn't exist **")
-        elif len(args) == 1:
-            print("** instance id missing **")
-        else:
-            models.storage.reload()
-            curr_objs = models.storage.all()
-            for ins, obj in curr_objs.items():
-                if obj.id == args[1] and obj.__class__.__name__ == args[0]:
-                    del(curr_objs[ins])
-                    models.storage.save()
-                    return
+            return
+        destroyed_class = globals()[class_name]
+        key = f"{class_name}.{instance_id}"
+        if key not in models.storage.all():
             print("** no instance found **")
+            return
+        del models.storage.all()[key]
+        models.storage.save()
 
     def do_update(self, args):
         """Updates an instance based on the class name and id."""
