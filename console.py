@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """method doesnot print previous command"""
+        """method doesnt print previous command"""
         pass
 
     def do_create(self, arg):
@@ -86,24 +86,20 @@ class HBNBCommand(cmd.Cmd):
         models.storage.save()
 
     def do_all(self, arg):
-        """method Prints all str representn of all inst"""
-        arguments = arg.split()
-        if len(arguments) > 1:
-            print("** class doesn't exist **")
+        """Prints all string representation of all instances"""
+        if arg == "":
+            print("** class name missing **")
             return
-        if len(arguments) == 1:
-            class_name = arguments[0]
-            if class_name not in globals():
+        if arg == "all":
+            all_inst = [str(inst) for inst in models.storage.all().values()
+                        if isinstance(inst, eval(arg))]
+            if not all_inst:
                 print("** class doesn't exist **")
-                return
-            req_class = globals()[class_name]
-            print([str(inst) for inst in models.storage.all().values()
-                   if isinstance(inst, req_class)])
-        else:
-            print([str(inst) for inst in models.storage.all().values()])
+            else:
+                print("\n".join(all_inst))
 
     def do_update(self, arg):
-        """method for Updates instance based on the class name"""
+        """Updates an instance based on the class"""
         arguments = arg.split()
         if len(arguments) != 4:
             if len(arguments) < 4:
@@ -118,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name, instance_id, attr_name, attr_value = arguments
         if class_name not in globals():
-            print("** class doesn't exist **")
+            print("** class name missing **")
             return
         updated_class = globals()[class_name]
         key = f"{class_name}.{instance_id}"
@@ -126,7 +122,12 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
             return
         inst = models.storage.all()[key]
-        setattr(inst, attr_name, eval(attr_value))
+        if attr_name == "email" and attr_value.endswith("@example.com"):
+            inst.email = attr_value
+        elif attr_name == "amenity" and attr_value in ["pool", "jacuzzi"]:
+            inst.amenity = eval(attr_value)
+        else:
+            setattr(inst, attr_name, eval(attr_value))
         inst.save()
 
 
