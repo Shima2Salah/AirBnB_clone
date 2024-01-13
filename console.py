@@ -110,7 +110,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** value missing **")
             return
-        class_name, instance_id, attr_name, attr_value = args
+        class_name, instance_id, attr_name, attr_value = arguments
         if class_name not in globals():
             print("** class doesn't exist **")
             return
