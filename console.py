@@ -85,35 +85,32 @@ class HBNBCommand(cmd.Cmd):
         else:
             print([str(inst) for inst in models.storage.all().values()])
 
-    def do_update(self, args):
-        """Updates an instance based on the class name and id."""
-        args = shlex.split(args)
-        if args == []:
-            print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "Place", "State",
-                             "City", "Amenity", "Review"]:
+    def do_update(self, arg):
+        """method for Updates instance based on the class name"""
+        arguments = arg.split()
+        if len(arguments) != 4:
+            if len(arguments) < 4:
+                if len(arguments) == 0:
+                    print("** class name missing **")
+                elif len(arguments) == 1:
+                    print("** instance id missing **")
+                else:
+                    print("** attribute name missing **")
+            else:
+                print("** value missing **")
+            return
+        class_name, instance_id, attr_name, attr_value = arguments
+        if class_name not in globals():
             print("** class doesn't exist **")
-        elif len(args) == 1:
-            print("** instance id missing **")
-        else:
-            models.storage.reload()
-            curr_objs = models.storage.all()
-            for ins, obj in curr_objs.items():
-                if obj.id == args[1] and obj.__class__.__name__ == args[0]:
-                    if len(args) == 2:
-                        print("** attribute name missing **")
-                        return
-                    elif len(args) == 3:
-                        print("** value missing **")
-                        return
-                    else:
-                        new_arg = args[3]
-                        if hasattr(obj, str(args[2])):
-                            new_arg = (type(getattr(obj, args[2])))(args[3])
-                        obj.__dict__[args[2]] = new_arg
-                        models.storage.save()
-                        return
+            return
+        updated_class = globals()[class_name]
+        key = f"{class_name}.{instance_id}"
+        if key not in models.storage.all():
             print("** no instance found **")
+            return
+        inst = models.storage.all()[key]
+        setattr(inst, attr_name, eval(attr_value))
+        inst.save()
 
     def emptyline(self):
         """An empty line doesn't execute anything"""
