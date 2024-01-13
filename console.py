@@ -1,8 +1,14 @@
 #!/usr/bin/python3
 """Parent class for running in cmd"""
 import cmd
-from models import storage
+import models
 from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -52,10 +58,10 @@ class HBNBCommand(cmd.Cmd):
             return
         new_class = globals()[class_name]
         key = f"{class_name}.{instance_id}"
-        if key not in storage.all():
+        if key not in models.storage.all():
             print("** no instance found **")
             return
-        inst = storage.all()[key]
+        inst = models.storage.all()[key]
         print(inst)
 
     def do_destroy(self, arg):
@@ -73,11 +79,11 @@ class HBNBCommand(cmd.Cmd):
             return
         destroyed_class = globals()[class_name]
         key = f"{class_name}.{instance_id}"
-        if key not in storage.all():
+        if key not in models.storage.all():
             print("** no instance found **")
             return
-        del storage.all()[key]
-        storage.save()
+        del models.storage.all()[key]
+        models.storage.save()
 
     def do_all(self, arg):
         """method Prints all str representn of all inst"""
@@ -91,10 +97,10 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             req_class = globals()[class_name]
-            print([str(inst) for inst in storage.all().values()
+            print([str(inst) for inst in models.storage.all().values()
                    if isinstance(inst, req_class)])
         else:
-            print([str(inst) for inst in storage.all().values()])
+            print([str(inst) for inst in models.storage.all().values()])
 
     def do_update(self, arg):
         """method for Updates instance based on the class name"""
@@ -116,10 +122,10 @@ class HBNBCommand(cmd.Cmd):
             return
         updated_class = globals()[class_name]
         key = f"{class_name}.{instance_id}"
-        if key not in storage.all():
+        if key not in models.storage.all():
             print("** no instance found **")
             return
-        inst = storage.all()[key]
+        inst = models.storage.all()[key]
         setattr(inst, attr_name, eval(attr_value))
         inst.save()
 
