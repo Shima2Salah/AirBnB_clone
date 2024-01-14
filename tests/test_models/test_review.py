@@ -26,7 +26,7 @@ class TestReview(unittest.TestCase):
     def test_attributes(self):
         """class attributes"""
         self.assertEqual(self.review.place_id, "1")
-        self.assertEqual(self.review.user_id, "1")
+        self.assertEqual(self.review.user_id, "123")
         self.assertEqual(self.review.text, "so good")
 
     def test_to_dict(self):
