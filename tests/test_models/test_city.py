@@ -53,6 +53,7 @@ class TestCity(unittest.TestCase):
         self.city.save()
         self.assertNotEqual(self.city.updated_at, old_updated_at)
         self.assertNotEqual(self.city.created_at, self.city.updated_at)
+
     def test_doc(self):
         """check class documentation"""
         self.assertIsNotNone(City.__doc__)
