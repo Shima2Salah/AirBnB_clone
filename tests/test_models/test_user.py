@@ -53,7 +53,7 @@ class TestUser(unittest.TestCase):
     def test_uniqueid(self):
         """check unique id generation"""
         self.assertNotEqual(self.test.id, self.test2.id)
-    
+
     def test_save(self):
         self.test.save()
         self.assertNotEqual(self.test.created_at, self.test.updated_at)
@@ -69,8 +69,9 @@ class TestUser(unittest.TestCase):
     def test_style(self):
         """test pep8 style"""
         file_style = pep8.StyleGuide(quiet=True)
-        style = style.check_files(['models/user.py'])     
+        style = style.check_files(['models/user.py'])
         self.assertEqual(style.total_errors, 0, "fix pep8")
+
 
 if __name__ == "__main__":
     unittest.main()

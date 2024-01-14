@@ -71,7 +71,8 @@ class Test_BaseModel(unittest.TestCase):
         after_save = self.instance_1.updated_at
         self.assertNotEqual(before_save, after_save)
         self.instance_2.save()
-        self.assertNotEqual(self.instance_2.created_at, self.instance_2.updated_at)
+        self.assertNotEqual(self.instance_2.created_at,
+                            self.instance_2.updated_at)
 
     def test_kwargs(self):
         """test unpacking arg"""
