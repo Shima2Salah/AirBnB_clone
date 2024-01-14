@@ -1,60 +1,115 @@
 #!/usr/bin/python3
-"""
-Unittest for BaseModel class
-"""
+"""testing base_model class"""
+
+
 import unittest
+from models.base_model import BaseModel
+from uuid import uuid4
 import os
 import pep8
-from models.base_model import BaseModel
+from datetime import datetime
 
 
-class TestBaseModel(unittest.TestCase):
+class Test_BaseModel(unittest.TestCase):
+    """
+    Methods:
+        setUp(self)
+        tearDown(self)
+        test_id(self)
+        test_unique(self)
+        test_date(self)
+        test_update(self)
+        test_kwargs(self)
+        test_to_dict(self)
+    """
+    def setUp(self):
+        """create BaseModel instance that will be used in test cases"""
+        self.instance_1 = BaseModel()
+        self.instance_2 = BaseModel()
+        self.instance_1.name = "ner"
+        self.instance_1.my_number = 7
 
-    @classmethod
-    def setUpClass(cls):
-        cls.base1 = BaseModel()
-        cls.base1.name = "Greg"
-        cls.base1.my_number = 29
-
-    @classmethod
-    def tearDownClass(cls):
-        del cls.base1
+    def tearDown(self):
+        """remove instance created for testing"""
+        del self.instance_1
+        del self.instance_2
         try:
-            os.remove("file.json")
+            os.remove("js")
         except FileNotFoundError:
             pass
 
-    def test_style_check(self):
-        """
-        Tests pep8 style
-        """
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/base_model.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
-
-    def test_checking_for_functions(self):
-        self.assertIsNotNone(BaseModel.__doc__)
-        self.assertIsNotNone(BaseModel.save.__doc__)
-        self.assertIsNotNone(BaseModel.to_dict.__doc__)
-
     def test_attributes(self):
-        self.assertTrue(hasattr(BaseModel, "__init__"))
-        self.assertTrue(hasattr(BaseModel, "save"))
+        """check attributes in class"""
         self.assertTrue(hasattr(BaseModel, "to_dict"))
+        self.assertTrue(hasattr(BaseModel, "save"))
+        self.assertTrue(hasattr(BaseModel, "__init__"))
 
-    def test_init(self):
-        self.assertTrue(isinstance(self.base1, BaseModel))
+    def test_id(self):
+        """
+        checking if id is generated from uuid testing id
+        and then converted to string
+        """
+        self.assertIsInstance(self.instance_1.id, str)
+
+    def test_inst(self):
+        """check if object is class instance"""
+        self.assertTrue(isinstance(self.instance_1, BaseModel))
+
+    def test_unique(self):
+        """test the generation of unique ids"""
+        self.assertNotEqual(self.instance_1.id, self.instance_2.id)
+
+    def test_date(self):
+        """test type of date"""
+        self.assertIsInstance(self.instance_1.created_at, datetime)
+        self.assertIsInstance(self.instance_1.updated_at, datetime)
 
     def test_save(self):
-        self.base1.save()
-        self.assertNotEqual(self.base1.created_at, self.base1.updated_at)
+        """check the change in time when update and save"""
+        before_save = self.instance_1.updated_at
+        self.instance_1.save()
+        after_save = self.instance_1.updated_at
+        self.assertNotEqual(before_save, after_save)
+        self.instance_2.save()
+        self.assertNotEqual(self.instance_2.created_at, self.instance_2.updated_at)
+
+    def test_kwargs(self):
+        """test unpacking arg"""
+        create_date = "2024-01-04T10:00:00.000000"
+        update_date = "2024-02-03T10:00:00.000000"
+        kwargs_output = {
+                "id": str(uuid4()),
+                "created_at": create_date,
+                "updated_at": update_date
+                }
+        kwargs_inst = BaseModel(**kwargs_output)
+        self.assertEqual(kwargs_inst.id, kwargs_output["id"])
+        f = ".000000"
+        self.assertEqual(kwargs_inst.created_at.isoformat() + f, create_date)
+        self.assertEqual(kwargs_inst.updated_at.isoformat() + f, update_date)
+        self.assertIsInstance(kwargs_inst.updated_at, datetime)
+        self.assertIsInstance(kwargs_inst.created_at, datetime)
+
+    def test_doc(self):
+        """check for documenting"""
+        self.assertIsNotNone(BaseModel.save.__doc__)
+        self.assertIsNotNone(BaseModel.to_dict.__doc__)
+        self.assertIsNotNone(BaseModel.__doc__)
 
     def test_to_dict(self):
-        base1_dict = self.base1.to_dict()
-        self.assertEqual(self.base1.__class__.__name__, 'BaseModel')
-        self.assertIsInstance(base1_dict['created_at'], str)
-        self.assertIsInstance(base1_dict['updated_at'], str)
+        dictionary = self.instance_1.to_dict()
+        self.assertIsInstance(dictionary, dict)
+        self.assertEqual(self.instance_1.__class__.__name__, 'BaseModel')
+        self.assertEqual(dictionary["__class__"], "BaseModel")
+        self.assertEqual(dictionary["id"], str(self.instance_1.id))
+        self.assertIsInstance(dictionary["created_at"], str)
+        self.assertIsInstance(dictionary["updated_at"], str)
 
+    def test_style(self):
+        """test pep8 style"""
+        file_style = pep8.StyleGuide(quiet=True)
+        style = style.check_files(['models/base_model.py'])
+        self.assertEqual(style.total_errors, 0, "fix pep8")
 
-if __name__ == "__main__":
-    unittest.main()
+    if __name__ == "__main__":
+        unittest.main()
