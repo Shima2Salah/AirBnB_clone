@@ -4,6 +4,8 @@
 import unittest
 from models.city import City
 from models.base_model import BaseModel
+import os
+import pep8
 
 class TestCity(unittest.TestCase):
     """"testing Class City"""
@@ -17,6 +19,10 @@ class TestCity(unittest.TestCase):
     def tearDown(self):
         """"Restart tests"""
         del self.city
+        try:
+            os.remove("jf")
+        except FileNotFoundError:
+            pass
 
     def test_instantiation(self):
         """Test instantiation of the class"""
@@ -57,6 +63,12 @@ class TestCity(unittest.TestCase):
     def test_doc(self):
         """check class documentation"""
         self.assertIsNotNone(City.__doc__)
+
+    def test_style(self):
+        """test pep8 style"""
+        file_style = pep8.StyleGuide(quiet=True)
+        style = style.check_files(['models/city.py'])
+        self.assertEqual(style.total_errors, 0, "fix pep8")
 
     def test_subClass(self):
         """check inheritance"""
