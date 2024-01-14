@@ -12,7 +12,7 @@ class TestReview(unittest.TestCase):
         """new Review"""
         self.review = Review()
         self.review.place_id = "1"
-        self.review.user.id = "123"
+        self.review.user_id = "123"
         self.review.text = "so good"
 
     def tearDown(self):
