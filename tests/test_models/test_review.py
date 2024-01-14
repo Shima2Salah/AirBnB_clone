@@ -3,18 +3,27 @@
 
 import unittest
 from models.review import Review
-
+from models.base_model import BaseModel
+import os
+import pep8
 
 class TestReview(unittest.TestCase):
     """"testing Class Review"""
 
     def setUp(self):
         """new Review"""
-        self.review = Review(place_id="1", user_id="1", text="so good")
+        self.review = Review()
+        self.review.place_id = "1"
+        self.review.user.id = "123"
+        self.review.text = "so good"
 
     def tearDown(self):
         """"delete review"""
         del self.review
+        try:
+            os.remove("jf")
+        except FileNotFoundError:
+            pass
 
     def test_instantiation(self):
         """ensure type class"""
@@ -36,13 +45,45 @@ class TestReview(unittest.TestCase):
         self.assertIn("created_at", review_dict)
         self.assertIn("updated_at", review_dict)
         self.assertIn("__class__", review_dict)
+        self.assertTrue('id' in self.review.__dict__)
+        self.assertTrue('created_at' in self.review.__dict__)
+        self.assertTrue('updated_at' in self.review.__dict__)
+        self.assertTrue('place_id' in self.review.__dict__)
+        self.assertTrue('text' in self.review.__dict__)
+        self.assertTrue('user_id' in self.review.__dict__)
 
     def test_save(self):
         """Test save method"""
         old_updated_at = self.review.updated_at
         self.review.save()
         self.assertNotEqual(self.review.updated_at, old_updated_at)
+        self.assertNotEqual(self.review.created_at, self.review.updated_at)
 
+    def test_subClass(self):
+        """check inheritance"""
+        self.assertTrue(issubclass(self.review.__class__, BaseModel), True)
+
+    def test_doc(self):
+        """check class documentation"""
+        self.assertIsNotNone(Review.__doc__)
+        self.assertTrue('id' in self.rev1.__dict__)
+        self.assertTrue('created_at' in self.rev1.__dict__)
+        self.assertTrue('updated_at' in self.rev1.__dict__)
+        self.assertTrue('place_id' in self.rev1.__dict__)
+        self.assertTrue('text' in self.rev1.__dict__)
+        self.assertTrue('user_id' in self.rev1.__dict__)
+
+    def test_attributeType(self):
+        """check if attribute is string"""
+        self.assertEqual(type(self.review.text), str)
+        self.assertEqual(type(self.review.place_id), str)
+        self.assertEqual(type(self.review.user_id), str)
+
+    def test_style(self):
+        """test pep8 style"""
+        file_style = pep8.StyleGuide(quiet=True)
+        style = style.check_files(['models/review.py'])
+        self.assertEqual(style.total_errors, 0, "fix pep8")
 
 if __name__ == "__main__":
     unittest.main()
