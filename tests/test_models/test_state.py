@@ -49,6 +49,10 @@ class TestState(unittest.TestCase):
         self.state.save()
         self.assertNotEqual(self.state.updated_at, old_updated_at)
 
+    def test_type(self);
+        """test attribute type"""
+        self.assertEqual(type(self.state.name), str)
+
     def test_doc(self):
       """check class documentation"""
       self.assertIsNotNone(State.__doc__)
