@@ -111,5 +111,43 @@ class Test_BaseModel(unittest.TestCase):
         style = style.check_files(['models/base_model.py'])
         self.assertEqual(style.total_errors, 0, "fix pep8")
 
+    def setUptwo(self):
+        """Set up function for the tests."""
+        self.first_m = BaseModel()
+        self.second_m = BaseModel()
+
+    def test_idtwo(self):
+        """Test that the id is a string."""
+        self.assertIsInstance(self.first_m.id, str)
+        self.assertNotEqual(self.first_m.id, self.second_m.id)
+
+    def test_created_attwo(self):
+        """Test that created_at is a datetime object."""
+        self.assertIsInstance(self.first_m.created_at, datetime)
+        self.assertNotEqual(self.first_m.created_at, self.second_m.created_at)
+
+    def test_updated_attwo(self):
+        """Test that updated_at is a datetime object."""
+        self.assertIsInstance(self.first_m.updated_at, datetime)
+        self.assertNotEqual(self.first_m.updated_at, self.second_m.updated_at)
+
+    def test_savetwo(self):
+        """Test that the save method updates updated_at."""
+        old_time = self.first_m.updated_at
+        self.first_m.save()
+        self.assertGreater(self.first_m.updated_at, old_time)
+
+    def test_to_dicttwo(self):
+        """Test that to_dict returns a dictionary."""
+        self.assertIsInstance(self.first_m.to_dict(), dict)
+
+    def test_to_dict_contentstwo(self):
+        """Test that to_dict includes the right keys."""
+        m_dict = self.first_m.to_dict()
+        self.assertIn('id', m_dict)
+        self.assertIn('created_at', m_dict)
+        self.assertIn('updated_at', m_dict)
+        self.assertIn('__class__', m_dict)
+
     if __name__ == "__main__":
         unittest.main()
