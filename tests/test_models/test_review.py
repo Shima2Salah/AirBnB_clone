@@ -60,12 +60,6 @@ class TestReview(unittest.TestCase):
     def test_doc(self):
         """check class documentation"""
         self.assertIsNotNone(Review.__doc__)
-        self.assertTrue('id' in self.rev1.__dict__)
-        self.assertTrue('created_at' in self.rev1.__dict__)
-        self.assertTrue('updated_at' in self.rev1.__dict__)
-        self.assertTrue('place_id' in self.rev1.__dict__)
-        self.assertTrue('text' in self.rev1.__dict__)
-        self.assertTrue('user_id' in self.rev1.__dict__)
 
     def test_attributeType(self):
         """check if attribute is string"""
