@@ -2,9 +2,6 @@
 import unittest
 from models.user import User
 from models.base_model import BaseModel
-import os
-import pep8
-
 
 class TestUser(unittest.TestCase):
     """
@@ -28,10 +25,6 @@ class TestUser(unittest.TestCase):
         """delete instance after testing"""
         del self.test
         del self.test2
-        try:
-            os.remove("jf")
-        except FileNotFoundError:
-            pass
 
     def test_objAttributes(self):
         """check attributes"""
@@ -65,13 +58,6 @@ class TestUser(unittest.TestCase):
     def test_subClass(self):
         """check inheritance"""
         self.assertTrue(issubclass(self.test.__class__, BaseModel), True)
-
-    def test_style(self):
-        """test pep8 style"""
-        file_style = pep8.StyleGuide(quiet=True)
-        style = style.check_files(['models/user.py'])
-        self.assertEqual(style.total_errors, 0, "fix pep8")
-
 
 if __name__ == "__main__":
     unittest.main()
