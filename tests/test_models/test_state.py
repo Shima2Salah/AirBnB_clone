@@ -3,26 +3,48 @@
 
 import unittest
 from models.state import State
-
+from models.base_model import BaseModel
+import os
+import pep8
 
 class TestState(unittest.TestCase):
     """"testing Class State"""
 
     def setUp(self):
         """new state"""
-        self.state = State(name="Ghaza")
+        self.state = State()
+        self.state.name = "Ghaza"
 
     def tearDown(self):
         """"delete state"""
         del self.state
+        try:
+            os.remove("js")
+        except FileNotFoundError:
+            pass
 
     def test_instantiation(self):
         """ensure type class"""
         self.assertIsInstance(self.state, State)
+      
+    def test_style(self):
+        """test pep8 style"""
+        file_style = pep8.StyleGuide(quiet=True)
+        style = style.check_files(['models/state.py'])
+        self.assertEqual(style.total_errors, 0, "fix pep8")
+
+    def test_subClass(self):
+      """check if instance class is subclass"""
+      self.assertTrue(issubclass(self.state.__class__, BaseModel), True)
 
     def test_attributes(self):
         """class attributes"""
         self.assertEqual(self.state.name, "Ghaza")
+        self.assertTrue('id' in self.state.__dict__)
+        self.assertTrue('created_at' in self.state.__dict__)
+        self.assertTrue('name' in self.state.__dict__)
+        self.assertTrue('updated_at' in self.state.__dict__)
+        
 
     def test_to_dict(self):
         """to_dict method testing"""
@@ -39,6 +61,13 @@ class TestState(unittest.TestCase):
         self.state.save()
         self.assertNotEqual(self.state.updated_at, old_updated_at)
 
+    def test_type(self);
+      """test attribute type"""
+      self.assertEqual(type(self.state.name), str)
+
+    def test_doc(self):
+      """check class documentation"""
+      self.assertIsNotNone(State.__doc__)
 
 if __name__ == "__main__":
     unittest.main()
