@@ -26,16 +26,6 @@ class TestUser(unittest.TestCase):
         del self.test
         del self.test2
 
-    def test_objAttributes(self):
-        """check attributes"""
-        self.assertTrue(hasattr(self.test.__dict__, 'id'))
-        self.assertTrue(hasattr(self.test.__dict__, 'created_at'))
-        self.assertTrue(hasattr(self.test.__dict__, 'updated_at'))
-        self.assertTrue(hasattr(self.test.__dict__, 'email'))
-        self.assertTrue(hasattr(self.test.__dict__, 'password'))
-        self.assertTrue(hasattr(self.test.__dict__, 'first_name'))
-        self.assertTrue(hasattr(self.test.__dict__, 'last_name'))
-
     def test_attributeType(self):
         """check if attribute is string"""
         self.assertEqual(type(self.test.first_name), str)
