@@ -17,6 +17,16 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
+    @classmethod
+    def get_file_path(cls):
+        """get file path for testing"""
+        return (cls.__filePath)
+
+    @classmethod
+    def get_object(cls):
+        """get __object dictionary for testing"""
+        return (cls.__objects)
+
     def __init__(self, file__path=None):
         """"initialization for class"""
         if file__path is not None:
