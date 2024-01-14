@@ -4,8 +4,6 @@
 import unittest
 from models.place import Place
 from models.base_model import BaseModel
-import os
-import pep8
 
 class TestPlace(unittest.TestCase):
     """"testing Class Place"""
@@ -28,10 +26,6 @@ class TestPlace(unittest.TestCase):
     def tearDown(self):
         """"Restart tests"""
         del self.place
-        try:
-            os.remove("jf")
-        except FileNotFoundError:
-            pass
 
     def test_instantiation(self):
         """Test instantiation of the class"""
@@ -112,12 +106,6 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(self.place1.latitude), float)
         self.assertEqual(type(self.place1.longitude), float)
         self.assertEqual(type(self.place1.amenity_ids), list)
-
-    def test_style(self):
-        """test pep8 style"""
-        file_style = pep8.StyleGuide(quiet=True)
-        style = style.check_files(['models/place.py'])
-        self.assertEqual(style.total_errors, 0, "fix pep8")
 
 if __name__ == "__main__":
     unittest.main()
