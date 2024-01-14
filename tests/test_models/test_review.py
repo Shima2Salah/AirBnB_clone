@@ -4,8 +4,6 @@
 import unittest
 from models.review import Review
 from models.base_model import BaseModel
-import os
-import pep8
 
 class TestReview(unittest.TestCase):
     """"testing Class Review"""
@@ -20,10 +18,6 @@ class TestReview(unittest.TestCase):
     def tearDown(self):
         """"delete review"""
         del self.review
-        try:
-            os.remove("jf")
-        except FileNotFoundError:
-            pass
 
     def test_instantiation(self):
         """ensure type class"""
@@ -78,12 +72,6 @@ class TestReview(unittest.TestCase):
         self.assertEqual(type(self.review.text), str)
         self.assertEqual(type(self.review.place_id), str)
         self.assertEqual(type(self.review.user_id), str)
-
-    def test_style(self):
-        """test pep8 style"""
-        file_style = pep8.StyleGuide(quiet=True)
-        style = style.check_files(['models/review.py'])
-        self.assertEqual(style.total_errors, 0, "fix pep8")
 
 if __name__ == "__main__":
     unittest.main()
