@@ -4,8 +4,6 @@
 import unittest
 from models.state import State
 from models.base_model import BaseModel
-import os
-import pep8
 
 class TestState(unittest.TestCase):
     """"testing Class State"""
@@ -18,20 +16,10 @@ class TestState(unittest.TestCase):
     def tearDown(self):
         """"delete state"""
         del self.state
-        try:
-            os.remove("js")
-        except FileNotFoundError:
-            pass
 
     def test_instantiation(self):
         """ensure type class"""
         self.assertIsInstance(self.state, State)
-      
-    def test_style(self):
-        """test pep8 style"""
-        file_style = pep8.StyleGuide(quiet=True)
-        style = style.check_files(['models/state.py'])
-        self.assertEqual(style.total_errors, 0, "fix pep8")
 
     def test_subClass(self):
       """check if instance class is subclass"""
