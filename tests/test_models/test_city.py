@@ -3,18 +3,26 @@
 
 import unittest
 from models.city import City
-
+from models.base_model import BaseModel
+import os
+import pep8
 
 class TestCity(unittest.TestCase):
     """"testing Class City"""
 
     def setUp(self):
         """SetUp tests"""
-        self.city = City(state_id="ps", name="palastine")
+        self.city = City()
+        self.city.state_id="ps"
+        self.city.name="palastine"
 
     def tearDown(self):
         """"Restart tests"""
         del self.city
+        try:
+            os.remove("jf")
+        except FileNotFoundError:
+            pass
 
     def test_instantiation(self):
         """Test instantiation of the class"""
@@ -24,6 +32,16 @@ class TestCity(unittest.TestCase):
         """Test attributes of the class"""
         self.assertEqual(self.city.state_id, "ps")
         self.assertEqual(self.city.name, "palastine")
+        self.assertTrue('id' in self.city.__dict__)
+        self.assertTrue('name' in self.city.__dict__)
+        self.assertTrue('state_id' in self.city.__dict__)
+        self.assertTrue('updated_at' in self.city.__dict__)
+        self.assertTrue('created_at' in self.city.__dict__)
+
+    def test_attributeType(self):
+        """check if attribute is string"""
+        self.assertEqual(type(self.city.state_id), str)
+        self.assertEqual(type(self.city.name), str)
 
     def test_to_dict(self):
         """Test to_dict method"""
@@ -40,7 +58,21 @@ class TestCity(unittest.TestCase):
         old_updated_at = self.city.updated_at
         self.city.save()
         self.assertNotEqual(self.city.updated_at, old_updated_at)
+        self.assertNotEqual(self.city.created_at, self.city.updated_at)
 
+    def test_doc(self):
+        """check class documentation"""
+        self.assertIsNotNone(City.__doc__)
+
+    def test_style(self):
+        """test pep8 style"""
+        file_style = pep8.StyleGuide(quiet=True)
+        style = style.check_files(['models/city.py'])
+        self.assertEqual(style.total_errors, 0, "fix pep8")
+
+    def test_subClass(self):
+        """check inheritance"""
+        self.assertTrue(issubclass(self.city.__class__, BaseModel), True)
 
 if __name__ == "__main__":
     unittest.main()
